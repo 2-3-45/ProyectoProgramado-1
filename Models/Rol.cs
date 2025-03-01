@@ -15,6 +15,11 @@ namespace ProyectoProgramado_1.Models
         [DisplayName("Nombre del Rol")]
         public string Nombre { get; set; }
 
+
+
+        // 🔴 Este constructor vacío es NECESARIO
+        public Rol() { }
+
         public Rol(int id, string nombre)
         {
             Id = id;
