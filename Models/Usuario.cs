@@ -1,10 +1,8 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-
 namespace ProyectoProgramado_1.Models
 {
-
     public class Usuario
     {
         [Required]
@@ -20,6 +18,9 @@ namespace ProyectoProgramado_1.Models
         [Required]
         public int RolId { get; set; }
 
+        // 🔴 Este constructor vacío es NECESARIO
+        public Usuario() { }
+
         public Usuario(int id, string nombre, string correo, int rolId)
         {
             Id = id;
@@ -28,5 +29,4 @@ namespace ProyectoProgramado_1.Models
             RolId = rolId;
         }
     }
-
 }

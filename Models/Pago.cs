@@ -20,6 +20,14 @@ namespace ProyectoProgramado_1.Models
         [DisplayName("Fecha de Pago")]
         public DateTime Fecha { get; set; }
 
+
+
+
+
+
+        // 🔴 Este constructor vacío es NECESARIO
+        public Pago() { }
+
         public Pago(int id, int reservaId, decimal monto, string metodo, DateTime fecha)
         {
             Id = id;

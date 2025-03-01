@@ -16,6 +16,15 @@ namespace ProyectoProgramado_1.Models
         [DisplayName("Ubicación")]
         public string Ubicacion { get; set; }
 
+
+
+        // 🔴 Este constructor vacío es NECESARIO
+        public Teatro() { }
+
+
+
+
+
         public Teatro(int id, string nombre, string ubicacion)
         {
             Id = id;
