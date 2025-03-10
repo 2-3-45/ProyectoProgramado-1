@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProyectoProgramado_1.Data;
 using ProyectoProgramado_1.Models;
+using BCrypt.Net;
+
 
 namespace ProyectoProgramado_1.Controllers
 {
@@ -50,14 +51,18 @@ namespace ProyectoProgramado_1.Controllers
         }
 
         // POST: Usuarios/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nombre,Correo,RolId")] Usuario usuario)
+        public async Task<IActionResult> Create([Bind("Nombre,Correo,Password")] Usuario usuario)
         {
             if (ModelState.IsValid)
             {
+                // 🔹 Asignar el rol automáticamente como "Comprador"
+                usuario.RolId = 2; // RolId = 2 ➔ Comprador
+
+                // 🔒 Encriptar la contraseña antes de guardarla
+                usuario.Password = BCrypt.Net.BCrypt.HashPassword(usuario.Password);
+
                 _context.Add(usuario);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -78,15 +83,17 @@ namespace ProyectoProgramado_1.Controllers
             {
                 return NotFound();
             }
+
+            // Ocultar la contraseña en el formulario
+            usuario.Password = string.Empty;
+
             return View(usuario);
         }
 
         // POST: Usuarios/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Correo,RolId")] Usuario usuario)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Correo,Password")] Usuario usuario)
         {
             if (id != usuario.Id)
             {
@@ -97,7 +104,19 @@ namespace ProyectoProgramado_1.Controllers
             {
                 try
                 {
-                    _context.Update(usuario);
+                    // 🔒 Obtener el usuario existente en la base de datos
+                    var usuarioExistente = await _context.Usuarios.FindAsync(id);
+
+                    if (!string.IsNullOrEmpty(usuario.Password))
+                    {
+                        usuarioExistente.Password = BCrypt.Net.BCrypt.HashPassword(usuario.Password);
+                    }
+
+                    // 🔹 Evita que el rol sea modificado
+                    usuarioExistente.Nombre = usuario.Nombre;
+                    usuarioExistente.Correo = usuario.Correo;
+
+                    _context.Update(usuarioExistente);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
