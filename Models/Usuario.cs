@@ -32,6 +32,9 @@ namespace ProyectoProgramado_1.Models
         // 🔴 Constructor vacío necesario para EF Core
         public Usuario() { }
 
+        public string? TokenRecuperacion { get; set; }
+
+
         public Usuario(int id, string nombre, string correo, string password, int rolId)
         {
             Id = id;
