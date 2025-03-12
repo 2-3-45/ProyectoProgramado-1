@@ -80,6 +80,19 @@ app.MapControllerRoute(
     defaults: new { controller = "AdministradorDashboard" }
 ).RequireAuthorization("AdminPolicy");
 
+
+
+
+app.MapControllerRoute(
+    name: "productos",
+    pattern: "Productos/{action=Index}/{id?}",
+    defaults: new { controller = "Productos" }
+);
+
+
+
+
+
 // Ruta para manejar errores personalizados
 app.MapControllerRoute(
     name: "error",

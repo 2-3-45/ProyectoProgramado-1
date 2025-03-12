@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProyectoProgramado_1.Data;
 
@@ -11,9 +12,11 @@ using ProyectoProgramado_1.Data;
 namespace ProyectoProgramado_1.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250311222015_CrearTablaProductos")]
+    partial class CrearTablaProductos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,8 +45,6 @@ namespace ProyectoProgramado_1.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("TeatroId");
 
                     b.ToTable("Obras");
                 });
@@ -197,17 +198,6 @@ namespace ProyectoProgramado_1.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Usuarios");
-                });
-
-            modelBuilder.Entity("ProyectoProgramado_1.Models.Obra", b =>
-                {
-                    b.HasOne("ProyectoProgramado_1.Models.Teatro", "Teatro")
-                        .WithMany()
-                        .HasForeignKey("TeatroId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Teatro");
                 });
 #pragma warning restore 612, 618
         }

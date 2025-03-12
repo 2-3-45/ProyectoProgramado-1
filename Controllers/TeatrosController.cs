@@ -10,11 +10,11 @@ using ProyectoProgramado_1.Models;
 
 namespace ProyectoProgramado_1.Controllers
 {
-    public class TeatroesController : Controller
+    public class TeatrosController : Controller
     {
         private readonly AppDbContext _context;
 
-        public TeatroesController(AppDbContext context)
+        public TeatrosController(AppDbContext context)
         {
             _context = context;
         }
