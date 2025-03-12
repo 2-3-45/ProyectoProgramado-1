@@ -11,6 +11,24 @@ namespace ProyectoProgramado_1.Controllers
             return View();
         }
 
+        // ✔️ Agregado: Mantenimiento de Obras
+        public IActionResult GestionObras()
+        {
+            return RedirectToAction("Index", "Obras");
+        }
+
+        // ✔️ Agregado: Mantenimiento de Productos
+        public IActionResult GestionProductos()
+        {
+            return RedirectToAction("Index", "Productos");
+        }
+
+        // ✔️ Agregado: Mantenimiento de Teatros
+        public IActionResult GestionTeatros()
+        {
+            return RedirectToAction("Index", "Teatros");
+        }
+
         public IActionResult Reportes()
         {
             return View();

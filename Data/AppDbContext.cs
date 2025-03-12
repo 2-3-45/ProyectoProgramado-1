@@ -17,6 +17,8 @@ namespace ProyectoProgramado_1.Data
         public DbSet<ProyectoProgramado_1.Models.Obra> Obras { get; set; } = default!;
         public DbSet<ProyectoProgramado_1.Models.Reserva> Reservas { get; set; } = default!;
         public DbSet<ProyectoProgramado_1.Models.Pago> Pagos { get; set; } = default!;
+
+        public DbSet<Producto> Productos { get; set; }  // 🔹 Agregado para gestionar productos
     }
 }
 

@@ -1,47 +1,35 @@
 ﻿@model IEnumerable<ProyectoProgramado_1.Models.Obra>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Cartelera de Obras";
 }
 
-<h1>Index</h1>
+<h1 class="text-center text-light mb-4">🎭 Cartelera de Obras 🎭</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Titulo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Descripcion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TeatroId)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Titulo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descripcion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TeatroId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    @foreach (var obra in Model)
+    {
+        <div class="col">
+            <div class="card text-white bg-dark shadow-lg">
+                <img src="~/images/obras/@obra.Titulo." class="card-img-top" alt="@obra.Titulo" />
+                <div class="card-body">
+                    <h5 class="card-title">@obra.Titulo</h5>
+                    <p class="card-text">@obra.Descripcion</p>
+                    <p class="card-text"><strong>Teatro:</strong> @(obra.Teatro?.Nombre ?? "N/A")</p>
+                    <a asp-action="Details" asp-route-id="@obra.Id" class="btn btn-warning">Ver Detalles</a>
+                    <a asp-action="Reservar" asp-route-id="@obra.Id" class="btn btn-success">Reservar</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- 🔒 Mostrar el botón "Crear Nueva Obra" solo para Administradores -->
+@if (Context.Session.GetString("RolId") == "1")
+{
+    <div class="text-center mt-4">
+        <a asp-action="Create" class="btn btn-danger">
+            <i class="fas fa-plus-circle"></i> Crear Nueva Obra
+        </a>
+    </div>
 }
-    </tbody>
-</table>

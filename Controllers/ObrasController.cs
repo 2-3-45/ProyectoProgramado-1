@@ -19,79 +19,78 @@ namespace ProyectoProgramado_1.Controllers
             _context = context;
         }
 
-        // GET: Obras
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Obras.ToListAsync());
+            var obras = await _context.Obras
+                                      .Include(o => o.Teatro)
+                                      .ToListAsync();
+
+            return View(obras);
         }
 
         // GET: Obras/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var obra = await _context.Obras
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (obra == null)
-            {
-                return NotFound();
-            }
+            var obra = await _context.Obras.Include(o => o.Teatro)
+                                           .FirstOrDefaultAsync(m => m.Id == id);
+            if (obra == null) return NotFound();
 
             return View(obra);
         }
 
         // GET: Obras/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            // 🔐 Verificación de Rol (Solo Administradores)
+            if (HttpContext.Session.GetString("RolId") != "1")
+            {
+                return RedirectToAction("Index");  // Redirige al Index si no es administrador
+            }
+
+            ViewData["TeatroId"] = new SelectList(await _context.Teatros.ToListAsync(), "Id", "Nombre");
             return View();
         }
 
         // POST: Obras/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Titulo,Descripcion,TeatroId")] Obra obra)
         {
+            if (HttpContext.Session.GetString("RolId") != "1")
+            {
+                return RedirectToAction("Index");  // Redirige al Index si no es administrador
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(obra);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["TeatroId"] = new SelectList(await _context.Teatros.ToListAsync(), "Id", "Nombre", obra.TeatroId);
             return View(obra);
         }
 
         // GET: Obras/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var obra = await _context.Obras.FindAsync(id);
-            if (obra == null)
-            {
-                return NotFound();
-            }
+            if (obra == null) return NotFound();
+
+            ViewData["TeatroId"] = new SelectList(await _context.Teatros.ToListAsync(), "Id", "Nombre", obra.TeatroId);
             return View(obra);
         }
 
         // POST: Obras/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Titulo,Descripcion,TeatroId")] Obra obra)
         {
-            if (id != obra.Id)
-            {
-                return NotFound();
-            }
+            if (id != obra.Id) return NotFound();
 
             if (ModelState.IsValid)
             {
@@ -102,34 +101,23 @@ namespace ProyectoProgramado_1.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ObraExists(obra.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    if (!ObraExists(obra.Id)) return NotFound();
+                    else throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["TeatroId"] = new SelectList(await _context.Teatros.ToListAsync(), "Id", "Nombre", obra.TeatroId);
             return View(obra);
         }
 
         // GET: Obras/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var obra = await _context.Obras
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (obra == null)
-            {
-                return NotFound();
-            }
+            var obra = await _context.Obras.Include(o => o.Teatro)
+                                           .FirstOrDefaultAsync(m => m.Id == id);
+            if (obra == null) return NotFound();
 
             return View(obra);
         }
@@ -143,9 +131,9 @@ namespace ProyectoProgramado_1.Controllers
             if (obra != null)
             {
                 _context.Obras.Remove(obra);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

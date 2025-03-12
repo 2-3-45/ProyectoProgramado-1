@@ -1,30 +1,30 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProyectoProgramado_1.Models
 {
-
-
     public class Obra
     {
         [Required]
         public int Id { get; set; }
 
         [DisplayName("Título de la Obra")]
+        [Required(ErrorMessage = "El título es obligatorio.")]
         public string Titulo { get; set; }
 
         [DisplayName("Descripción")]
+        [Required(ErrorMessage = "La descripción es obligatoria.")]
         public string Descripcion { get; set; }
 
         [Required]
         public int TeatroId { get; set; }
 
+        // 🔹 Relación con la tabla de Teatros
+        [ForeignKey("TeatroId")]
+        public Teatro Teatro { get; set; }
 
-
-
-
-        // 🔴 Este constructor vacío es NECESARIO
+        // 🔹 Constructor vacío requerido por EF Core
         public Obra() { }
 
         public Obra(int id, string titulo, string descripcion, int teatroId)
@@ -35,5 +35,4 @@ namespace ProyectoProgramado_1.Models
             TeatroId = teatroId;
         }
     }
-
 }
