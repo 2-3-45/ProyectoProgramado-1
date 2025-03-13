@@ -6,7 +6,8 @@ namespace ProyectoProgramado_1.Models
 {
     public class Obra
     {
-        [Required]
+        [Key]  // ✅ Corrección: Marcamos el campo 'Id' como clave primaria
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // 🔹 Para que sea autoincremental
         public int Id { get; set; }
 
         [DisplayName("Título de la Obra")]

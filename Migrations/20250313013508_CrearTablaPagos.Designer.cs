@@ -12,8 +12,8 @@ using ProyectoProgramado_1.Data;
 namespace ProyectoProgramado_1.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250311232804_AddTeatroToObra")]
-    partial class AddTeatroToObra
+    [Migration("20250313013508_CrearTablaPagos")]
+    partial class CrearTablaPagos
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
