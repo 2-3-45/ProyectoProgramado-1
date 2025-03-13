@@ -5,7 +5,7 @@
 namespace ProyectoProgramado_1.Migrations
 {
     /// <inheritdoc />
-    public partial class Pago : Migration
+    public partial class SincronizarBaseDeDatos : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

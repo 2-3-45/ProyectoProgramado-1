@@ -5,7 +5,7 @@
 namespace ProyectoProgramado_1.Migrations
 {
     /// <inheritdoc />
-    public partial class Obra : Migration
+    public partial class CrearTablaPagos : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -12,8 +12,8 @@ using ProyectoProgramado_1.Data;
 namespace ProyectoProgramado_1.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250301173335_Pago")]
-    partial class Pago
+    [Migration("20250313014112_SincronizarBaseDeDatos")]
+    partial class SincronizarBaseDeDatos
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,6 +46,8 @@ namespace ProyectoProgramado_1.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("TeatroId");
+
                     b.ToTable("Obras");
                 });
 
@@ -73,6 +75,39 @@ namespace ProyectoProgramado_1.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Pagos");
+                });
+
+            modelBuilder.Entity("ProyectoProgramado_1.Models.Producto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<bool>("Estado")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Imagen")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<decimal>("Precio")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Productos");
                 });
 
             modelBuilder.Entity("ProyectoProgramado_1.Models.Reserva", b =>
@@ -149,14 +184,33 @@ namespace ProyectoProgramado_1.Migrations
 
                     b.Property<string>("Nombre")
                         .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("RolId")
                         .HasColumnType("int");
 
+                    b.Property<string>("TokenRecuperacion")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Usuarios");
+                });
+
+            modelBuilder.Entity("ProyectoProgramado_1.Models.Obra", b =>
+                {
+                    b.HasOne("ProyectoProgramado_1.Models.Teatro", "Teatro")
+                        .WithMany()
+                        .HasForeignKey("TeatroId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Teatro");
                 });
 #pragma warning restore 612, 618
         }
